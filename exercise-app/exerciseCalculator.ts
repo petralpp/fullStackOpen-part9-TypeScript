@@ -1,3 +1,8 @@
+interface HourValues {
+  target: number;
+  hours: number[];
+}
+
 interface Result {
   periodLength: number;
   trainingDays: number;
@@ -24,7 +29,7 @@ const getRating = (
 
   if (success) {
     rating = 3;
-    description = "Target achieved!";
+    description = "Daily exercise target achieved!";
   } else if (hours >= days * target) {
     rating = 2;
     description = "Daily exercise not achieved but target hours were met";
@@ -39,27 +44,39 @@ const getRating = (
   };
 };
 
-const calculateExercises = (dailyHours: number[], target: number): Result => {
-  const days = dailyHours.length;
-  let success = true;
-  let trainingDays = 0;
-  let trainingHours = 0;
+const parseArguments = (args: string[]): HourValues => {
+  if (args.length < 4) throw new Error("Not enough arguments");
 
-  for (let hour of dailyHours) {
-    if (hour < target) {
-      success = false;
-    }
-    if (hour > 0) {
-      trainingDays++;
-      trainingHours += hour;
+  let resultHours = [];
+
+  for (let value of args.slice(2)) {
+    if (isNaN(Number(value))) {
+      throw new Error("Provided values were not numbers!");
+    } else {
+      resultHours.push(Number(value));
     }
   }
+  return {
+    target: resultHours[0],
+    hours: resultHours.slice(1),
+  };
+};
+
+const calculateExercises = (dailyHours: number[], target: number): Result => {
+  const days = dailyHours.length;
+  const trainingDays = dailyHours.filter((hour) => hour > 0);
+  const trainingHours = trainingDays.reduce(
+    (result, current) => result + current,
+    0
+  );
+  const success = trainingDays.length === dailyHours.length ? true : false;
+
   const average = trainingHours / days;
   const ratingResult = getRating(success, trainingHours, days, target);
 
   return {
     periodLength: days,
-    trainingDays: trainingDays,
+    trainingDays: trainingDays.length,
     success: success,
     rating: ratingResult.rating,
     ratingDescription: ratingResult.description,
@@ -68,6 +85,15 @@ const calculateExercises = (dailyHours: number[], target: number): Result => {
   };
 };
 
-console.log(calculateExercises([3, 0, 2, 4.5, 0, 3, 1], 2));
-console.log(calculateExercises([3, 0, 2, 0, 3, 3, 4], 2));
-console.log(calculateExercises([3, 2, 2, 4.5, 3, 3, 4], 2));
+try {
+  const { target, hours } = parseArguments(process.argv);
+  console.log(calculateExercises(hours, target));
+} catch (error: unknown) {
+  let errorMessage = "Something bad happened.";
+  if (error instanceof Error) {
+    errorMessage += " Error: " + error.message;
+  }
+  console.log(errorMessage);
+}
+
+export default calculateExercises;
