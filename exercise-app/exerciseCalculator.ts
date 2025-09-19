@@ -30,7 +30,7 @@ const getRating = (
   if (success) {
     rating = 3;
     description = "Daily exercise target achieved!";
-  } else if (hours >= days * target) {
+  } else if (hours > 0 && hours >= days * target) {
     rating = 2;
     description = "Daily exercise not achieved but target hours were met";
   } else {
@@ -47,9 +47,9 @@ const getRating = (
 const parseArguments = (args: string[]): HourValues => {
   if (args.length < 4) throw new Error("Not enough arguments");
 
-  let resultHours = [];
+  const resultHours = [];
 
-  for (let value of args.slice(2)) {
+  for (const value of args.slice(2)) {
     if (isNaN(Number(value))) {
       throw new Error("Provided values were not numbers!");
     } else {
@@ -69,7 +69,16 @@ const calculateExercises = (dailyHours: number[], target: number): Result => {
     (result, current) => result + current,
     0
   );
-  const success = trainingDays.length === dailyHours.length ? true : false;
+  let success;
+  if (trainingDays.length > 0) {
+    success =
+      trainingDays.length === dailyHours.length &&
+      trainingHours >= target * days
+        ? true
+        : false;
+  } else {
+    success = false;
+  }
 
   const average = trainingHours / days;
   const ratingResult = getRating(success, trainingHours, days, target);
@@ -85,15 +94,17 @@ const calculateExercises = (dailyHours: number[], target: number): Result => {
   };
 };
 
-try {
-  const { target, hours } = parseArguments(process.argv);
-  console.log(calculateExercises(hours, target));
-} catch (error: unknown) {
-  let errorMessage = "Something bad happened.";
-  if (error instanceof Error) {
-    errorMessage += " Error: " + error.message;
+if (require.main === module) {
+  try {
+    const { target, hours } = parseArguments(process.argv);
+    console.log(calculateExercises(hours, target));
+  } catch (error: unknown) {
+    let errorMessage = "Something bad happened.";
+    if (error instanceof Error) {
+      errorMessage += " Error: " + error.message;
+    }
+    console.log(errorMessage);
   }
-  console.log(errorMessage);
 }
 
 export default calculateExercises;
