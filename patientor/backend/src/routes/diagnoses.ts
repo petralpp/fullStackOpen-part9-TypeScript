@@ -1,16 +1,13 @@
-import express from "express";
+import express, { Response } from "express";
 import diagnosesService from "../services/diagnosesService";
+import { Diagnosis } from "../types";
 
 const router = express.Router();
 
-router.get("/", (_req, res) => {
+router.get("/", (_req, res: Response<Diagnosis[]>) => {
   console.log("Fetching all diagnoses!");
   const data = diagnosesService.getDiagnoses();
   res.json(data);
-});
-
-router.post("/", (_req, res) => {
-  res.send("Saving a diary!");
 });
 
 export default router;
