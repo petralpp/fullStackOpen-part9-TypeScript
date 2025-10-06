@@ -38,40 +38,100 @@ const DiaryForm = ({ submitDiary }: FormProps) => {
   return (
     <form onSubmit={addDiary}>
       <div>
+        Date:
         <input
-          type="text"
+          type="date"
           name="date"
           value={values.date}
           onChange={handleChange}
         />
-        date
       </div>
       <div>
+        Visibility:
         <input
-          type="text"
+          type="radio"
+          id="great"
           name="visibility"
-          value={values.visibility}
+          value="great"
           onChange={handleChange}
         />
-        visibility
-      </div>
-      <div>
+        Great
         <input
-          type="text"
-          name="weather"
-          value={values.weather}
+          type="radio"
+          id="good"
+          name="visibility"
+          value="good"
           onChange={handleChange}
         />
-        weather
+        Good
+        <input
+          type="radio"
+          id="ok"
+          name="visibility"
+          value="ok"
+          onChange={handleChange}
+        />
+        Okay
+        <input
+          type="radio"
+          id="poor"
+          name="visibility"
+          value="poor"
+          onChange={handleChange}
+        />
+        Poor
       </div>
       <div>
+        Weather:
+        <input
+          type="radio"
+          id="sunny"
+          name="weather"
+          value="sunny"
+          onChange={handleChange}
+        />
+        Sunny
+        <input
+          type="radio"
+          id="rainy"
+          name="weather"
+          value="rainy"
+          onChange={handleChange}
+        />
+        Rainy
+        <input
+          type="radio"
+          id="cloudy"
+          name="weather"
+          value="cloudy"
+          onChange={handleChange}
+        />
+        Cloudy
+        <input
+          type="radio"
+          id="stormy"
+          name="weather"
+          value="stormy"
+          onChange={handleChange}
+        />
+        Stormy
+        <input
+          type="radio"
+          id="windy"
+          name="weather"
+          value="windy"
+          onChange={handleChange}
+        />
+        Windy
+      </div>
+      <div>
+        Comment:
         <input
           type="text"
           name="comment"
           value={values.comment}
           onChange={handleChange}
         />
-        comment
       </div>
       <button>add</button>
     </form>

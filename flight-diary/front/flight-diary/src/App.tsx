@@ -40,7 +40,8 @@ function App() {
         <div key={diary.id}>
           <h2>{diary.date}</h2>
           visibility: {diary.visibility} <br />
-          weather: {diary.weather} {diary?.comment}
+          weather: {diary.weather} <br />
+          {diary?.comment ? `comment: ${diary.comment}` : ""}
         </div>
       ))}
     </>
