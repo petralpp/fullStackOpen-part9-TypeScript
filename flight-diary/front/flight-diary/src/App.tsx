@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import "./App.css";
 import { DiaryEntry } from "./types";
 import diaryService from "./services/diaryService";
+import DiaryForm from "./components/DiaryForm";
 
 function App() {
   const [diaries, setDiaries] = useState<DiaryEntry[]>([]);
@@ -12,9 +13,18 @@ function App() {
     });
   }, []);
 
+  const submitNewDiary = (diary: unknown) => {
+    diaryService.createEntry(diary).then((result) => {
+      const newEntry = result as DiaryEntry;
+      setDiaries(diaries.concat(newEntry));
+    });
+  };
+
   return (
     <>
-      <h1>Diary entries</h1>
+      <h2>Add new entry</h2>
+      <DiaryForm submitDiary={submitNewDiary} />
+      <h2>Diary entries</h2>
       {diaries.map((diary) => (
         <div key={diary.id}>
           <h2>{diary.date}</h2>

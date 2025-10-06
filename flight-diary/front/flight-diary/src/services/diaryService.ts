@@ -4,8 +4,12 @@ import { DiaryEntry } from "../types";
 
 const getAll = async () => {
   const { data } = await axios.get<DiaryEntry[]>(apiBaseUrl);
-
   return data;
 };
 
-export default { getAll };
+const createEntry = async (object: unknown) => {
+  const response = await axios.post<DiaryEntry>(apiBaseUrl, object);
+  return response.data;
+};
+
+export default { getAll, createEntry };
