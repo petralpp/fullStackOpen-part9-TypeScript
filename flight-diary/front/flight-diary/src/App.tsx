@@ -6,6 +6,7 @@ import DiaryForm from "./components/DiaryForm";
 
 function App() {
   const [diaries, setDiaries] = useState<DiaryEntry[]>([]);
+  const [errorMessage, setErrorMessage] = useState<string>("");
 
   useEffect(() => {
     diaryService.getAll().then((data) => {
@@ -14,15 +15,25 @@ function App() {
   }, []);
 
   const submitNewDiary = (diary: unknown) => {
-    diaryService.createEntry(diary).then((result) => {
-      const newEntry = result as DiaryEntry;
-      setDiaries(diaries.concat(newEntry));
-    });
+    diaryService
+      .createEntry(diary)
+      .then((result) => {
+        const newEntry = result as DiaryEntry;
+        setDiaries(diaries.concat(newEntry));
+      })
+      .catch((error) => {
+        console.log(error);
+        setErrorMessage(error?.response.data);
+        setTimeout(() => {
+          setErrorMessage("");
+        }, 5000);
+      });
   };
 
   return (
     <>
       <h2>Add new entry</h2>
+      <p className="error">{errorMessage}</p>
       <DiaryForm submitDiary={submitNewDiary} />
       <h2>Diary entries</h2>
       {diaries.map((diary) => (
