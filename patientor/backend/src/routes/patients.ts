@@ -1,7 +1,7 @@
 import express, { Request, Response, NextFunction } from "express";
 import { z } from "zod";
 import patientService from "../services/patientService";
-import { NonSensitivePatient, NewPatient } from "../types";
+import { NonSensitivePatient, NewPatient, Patient } from "../types";
 import newPatientSchema from "../utils";
 
 const router = express.Router();
@@ -32,6 +32,11 @@ const errorMiddleware = (
     next(error);
   }
 };
+
+router.get("/:id", (req, res: Response<Patient>) => {
+  const data = patientService.getPatient(req.params.id);
+  res.json(data);
+});
 
 router.post(
   "/",
