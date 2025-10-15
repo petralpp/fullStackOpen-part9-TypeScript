@@ -1,10 +1,11 @@
 import { useParams } from "react-router-dom";
-import { Patient } from "../types";
+import { Patient } from "../../types";
 import { useEffect, useState } from "react";
 import { Container, Typography } from "@mui/material";
 import FemaleIcon from "@mui/icons-material/Female";
 import MaleIcon from "@mui/icons-material/Male";
-import patientService from "../services/patients";
+import patientService from "../../services/patients";
+import EntryInfo from "./EntryInfo";
 
 const PatientPage = () => {
   const [patient, setPatient] = useState<Patient | null>(null);
@@ -32,6 +33,17 @@ const PatientPage = () => {
           <Typography variant="body1" style={{ marginBottom: "0.5em" }}>
             occupation: {patient.occupation}
           </Typography>
+          <Typography
+            variant="h4"
+            style={{ marginBottom: "0.5em", marginTop: "0.5em" }}
+          >
+            Entries
+          </Typography>
+          <>
+            {patient.entries.map((entry, index) => (
+              <EntryInfo key={index} entry={entry} />
+            ))}
+          </>
         </Container>
       ) : (
         <p>Nothing here</p>
