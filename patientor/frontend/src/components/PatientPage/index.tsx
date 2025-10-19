@@ -17,9 +17,12 @@ const PatientPage = ({ diagnoses }: PatientProps) => {
 
   useEffect(() => {
     if (params.id) {
-      patientService.getPatient(params.id).then((result) => {
-        setPatient(result);
-      });
+      patientService
+        .getPatient(params.id)
+        .then((result) => {
+          setPatient(result);
+        })
+        .catch((error) => console.log(error));
     }
   }, [params.id]);
 
@@ -50,7 +53,7 @@ const PatientPage = ({ diagnoses }: PatientProps) => {
           </>
         </Container>
       ) : (
-        <p>Nothing here</p>
+        <p>No patient selected</p>
       )}
     </div>
   );
