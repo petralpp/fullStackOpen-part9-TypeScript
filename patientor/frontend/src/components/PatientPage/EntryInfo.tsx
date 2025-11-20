@@ -94,6 +94,9 @@ const EntryInfo = ({ entry, diagnoses }: Props) => {
           getDiagnoses(diagnose, index)
         )}
       </Typography>
+      <Typography variant="body1" style={{ marginTop: "0.5em" }}>
+        Specialist: <i>{entry.specialist}</i>
+      </Typography>
     </Container>
   );
 };
